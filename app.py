@@ -287,7 +287,7 @@ def parse_ocr_error(error_str: str, lang: str) -> Tuple[str, str, str]:
             "Download from github.com/UB-Mannheim/tesseract/wiki (Windows). Then restart the app."
         )
 
-    if "failed loading language" in msg or f"(kannada)" in msg or "lang" in msg:
+    if "failed loading language" in msg or "(kannada)" in msg or "lang" in msg:
         lang_pkg = {
             "kan": "tesseract-ocr-kan", "hin": "tesseract-ocr-hin",
             "tam": "tesseract-ocr-tam", "tel": "tesseract-ocr-tel",
