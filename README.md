@@ -1,140 +1,164 @@
-📄 Legal Document Translator & Summarizer
-An intelligent Streamlit application designed to translate and summarize legal documents from Kannada to English. This tool leverages Optical Character Recognition (OCR) to extract text from images and PDFs, followed by advanced AI models from the Hugging Face Hub for seamless translation and summarization.
+# Legal Document Translator & Summarizer
 
-## ✨ Key Features
+A production-ready Streamlit application that extracts, translates, and summarizes legal documents written in Indian languages (Kannada, Hindi, Tamil, Telugu, Malayalam) into clear English — powered by free-tier AI APIs.
 
-Multi-Format Upload: Supports both image (.jpg, .png, .jpeg) and multi-page .pdf files.
+---
 
-Advanced OCR: Uses Tesseract to accurately extract Kannada text from documents.
+## Features
 
-High-Quality Translation: Integrates with the facebook/nllb-200-distilled-600M model for reliable Kannada to English translation.
+- **Multi-format input** — PDF (multi-page) and images (JPG, PNG)
+- **OCR** — Tesseract extracts Indic script text from scanned documents
+- **Two free AI backends** — Google Gemini 2.0 Flash or Groq Llama 3.1 8B (user-selectable)
+- **High-quality translation** — LLM-powered, preserves legal terminology and document structure
+- **Structured legal summaries** — document type, parties, subject, obligations, dates
+- **5 Indic languages** — Kannada, Hindi, Tamil, Telugu, Malayalam
+- **Comprehensive error handling** — every failure (API, OCR, PDF, network) shows a plain-English explanation with a fix
+- **Dark theme UI** — responsive two-column layout, sidebar config
 
-Intelligent Summarization: Employs the facebook/bart-large-cnn model to generate concise summaries of the translated text.
+---
 
-Interactive UI: A user-friendly interface built with Streamlit, providing real-time progress updates.
+## Tech Stack
 
-Robust API Handling: Features automatic retries with exponential backoff for resilient communication with external APIs.
+| Layer | Technology |
+|-------|-----------|
+| UI framework | [Streamlit](https://streamlit.io) |
+| OCR engine | [Tesseract](https://github.com/tesseract-ocr/tesseract) + [pytesseract](https://github.com/madmaze/pytesseract) |
+| PDF → image | [pdf2image](https://github.com/Belval/pdf2image) + Poppler |
+| Image handling | [Pillow](https://python-pillow.org) |
+| AI — translation & summary | [Google Gemini 2.0 Flash](https://aistudio.google.com) or [Groq Llama 3.1 8B](https://groq.com) |
 
-Page-by-Page Processing: For PDFs, each page is processed and displayed individually, maintaining the document's structure.
+---
 
-🚀 How It Works
-API Setup: The user starts by entering their Hugging Face API token. The app includes a built-in connection test.
+## Prerequisites
 
-Document Upload: Upload a Kannada legal document as a PDF or an image file.
+### 1. Tesseract OCR + Indic language packs
 
-Text Extraction:
+```bash
+# macOS
+brew install tesseract tesseract-lang
 
-For PDFs, the file is converted into a series of images, one for each page.
+# Ubuntu / Debian
+sudo apt install tesseract-ocr \
+  tesseract-ocr-kan tesseract-ocr-hin \
+  tesseract-ocr-tam tesseract-ocr-tel tesseract-ocr-mal
 
-pytesseract then performs OCR on each image to extract the Kannada text.
+# Windows
+# Download installer from https://github.com/UB-Mannheim/tesseract/wiki
+# During install, check "Additional language data" and select the languages you need
+# Add the install directory to your system PATH
+```
 
-Translation: The extracted text is broken into manageable chunks and sent to the Hugging Face Inference API for translation to English.
+### 2. Poppler (PDF processing)
 
-Summarization: The translated English text is then sent to a summarization model to create a compact and coherent summary.
+```bash
+# macOS
+brew install poppler
 
-Display Results: The extracted text, full translation, and the final summary are all displayed in a clean, side-by-side layout.
+# Ubuntu / Debian
+sudo apt install poppler-utils
 
-🛠️ Setup and Installation
-Follow these steps to run the project locally.
+# Windows
+# Download from https://github.com/oschwartz10612/poppler-windows/releases
+# Extract and add the bin/ folder to your system PATH
+```
 
-Prerequisites
-Python 3.8 or higher
+### 3. A free AI API key (pick one or both)
 
-Tesseract OCR Engine
+| Provider | Free tier | Get key |
+|----------|-----------|---------|
+| **Google Gemini** | 1,500 req/day · 15 RPM | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) |
+| **Groq** | 6,000 tokens/min | [console.groq.com/keys](https://console.groq.com/keys) |
 
-Windows: Download and install from Tesseract at UB Mannheim. Make sure to add the installation directory to your system's PATH.
+---
 
-macOS: brew install tesseract
+## Installation
 
-Linux: sudo apt-get install tesseract-ocr libtesseract-dev
+```bash
+# 1. Clone the repo
+git clone https://github.com/your-username/Legal_Document_Translator-Summarizer.git
+cd Legal_Document_Translator-Summarizer
 
-Poppler (for PDF processing)
+# 2. Create and activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
-Windows: Download the latest version from this blog. Add the bin/ directory to your system's PATH.
-
-macOS: brew install poppler
-
-Linux: sudo apt-get install poppler-utils
-
-Installation Steps
-Clone the Repository
-
-Bash
-
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-Create a Virtual Environment
-It's recommended to use a virtual environment to manage dependencies.
-
-Bash
-
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install Dependencies
-Create a requirements.txt file with the following content:
-
-Plaintext
-
-streamlit
-pytesseract
-Pillow
-pdf2image
-requests
-tenacity
-Then, run the installation command:
-
-Bash
-
+# 3. Install Python dependencies
 pip install -r requirements.txt
-Get a Hugging Face API Token
+```
 
-Go to Hugging Face and create an account.
+---
 
-Navigate to your Profile -> Settings -> Access Tokens.
+## Running the App
 
-Create a new token with the "read" role.
-
-▶️ How to Run the App
-Execute the Streamlit command from your terminal:
-
-Bash
-
+```bash
 streamlit run app.py
-(Assuming your Python script is named app.py)
+```
 
-Open your web browser and go to http://localhost:8501.
+Open [http://localhost:8501](http://localhost:8501) in your browser.
 
-Paste your Hugging Face API token in the "API Setup" section and start translating your documents!
+---
 
-💻 Technology Stack
-Application Framework: Streamlit
+## How to Use
 
-OCR Engine: Tesseract (pytesseract wrapper)
+1. **Sidebar → AI Provider** — select Google Gemini or Groq
+2. **Sidebar → API Key** — paste your free API key and click **Test Connection**
+3. **Sidebar → Source Language** — select the language your document is written in
+4. **Upload** a PDF or image file
+5. Click **Translate & Summarize**
 
-PDF Processing: pdf2image
+Results are displayed as:
+- Extracted original text (per page for PDFs)
+- Full English translation
+- Structured 5-point legal summary
 
-Image Handling: Pillow
+---
 
-API Communication: requests, tenacity
+## Project Structure
 
-AI Models (via Hugging Face API):
+```
+Legal_Document_Translator-Summarizer/
+├── app.py            # Main application (single file)
+├── requirements.txt  # Python dependencies
+├── .gitignore        # Git ignore rules
+├── LICENSE           # MIT License
+└── README.md         # This file
+```
 
-Translation: facebook/nllb-200-distilled-600M
+---
 
-Summarization: facebook/bart-large-cnn
+## Error Handling
 
-🤝 Contributing
-Contributions are welcome! If you'd like to improve the application or add new features, please follow these steps:
+Every error surface shows a plain-English message with a specific fix:
 
-Fork the repository.
+| Category | Errors handled |
+|----------|---------------|
+| API — Gemini | Invalid key, quota exhausted, rate limit, permission denied, model unavailable, SSL, timeout, service down, safety block |
+| API — Groq | Invalid key, rate limit, daily quota, model unavailable, context too long, network error, timeout, service down |
+| Missing packages | `pip install google-generativeai` / `pip install groq` instructions shown inline |
+| OCR | Tesseract not installed, language pack missing, no text detected, low resolution warning |
+| PDF | Poppler not installed, password-protected PDF, corrupted file, file too large |
+| Image | Unreadable file, corrupted/truncated image |
 
-Create a new branch (git checkout -b feature/YourAmazingFeature).
+---
 
-Make your changes and commit them (git commit -m 'Add some amazing feature').
+## Common Issues
 
-Push to the branch (git push origin feature/YourAmazingFeature).
+**`TesseractNotFoundError`**
+Tesseract is not installed or not on your PATH. Install it per the prerequisites above and restart the app.
 
-Open a Pull Request.
+**`PDFPageCountError` / Poppler error**
+Poppler is not installed. Install it per the prerequisites above and restart the app.
 
-📄 License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+**Gemini 429 — quota exhausted**
+Your key's daily free-tier limit is reached. Wait until tomorrow or switch to Groq in the sidebar.
+
+**No text detected on a page**
+The scan resolution may be too low (aim for ≥150 DPI) or the wrong source language is selected.
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+Copyright (c) 2025 Aadhavan A P
