@@ -1,3 +1,9 @@
-flask
-requests
-googletrans==4.0.0-rc1
+# ── Core application ──────────────────────────
+streamlit>=1.35.0
+Pillow>=10.0.0
+pdf2image>=1.17.0
+pytesseract>=0.3.10
+
+# ── AI providers (install the one(s) you use) ─
+google-generativeai>=0.7.0   # Google Gemini — get key at aistudio.google.com
+groq>=0.9.0                  # Groq Llama    — get key at console.groq.com
